@@ -119,7 +119,7 @@ class Padez
     public function setName($ime)
     {
         // Za svaki slučaj se imenu ukidaju razmaci sa početka i kraja
-        $ime = rtrim(ltrim($ime));
+        $ime = trim($ime);
 
         // Definisanje imena. Ime se piše sa prvim velikim slovom
         $this->ime = mb_convert_case($ime, MB_CASE_TITLE, 'utf-8');
