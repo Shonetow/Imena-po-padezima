@@ -19,13 +19,13 @@ use Shonetow\Padez;
 $ime = 'Predrag';
 $pol = 2
 
-echo Padez::nominativ($name) // Predrag
-echo Padez::genitiv($name, $gender) // Predraga
-echo Padez::dativ($name, $gender) // Predragu
-echo Padez::akuzativ($name, $gender) // Predraga
-echo Padez::vokativ($name, $gender) // Predraže
-echo Padez::instrumental($name, $gender) // Predragom
-echo Padez::lokativ($name, $gender) // Predragu
+echo Padez::nominativ($ime) // Predrag
+echo Padez::genitiv($ime, $pol) // Predraga
+echo Padez::dativ($ime, $pol) // Predragu
+echo Padez::akuzativ($ime, $pol) // Predraga
+echo Padez::vokativ($ime, $pol) // Predraže
+echo Padez::instrumental($ime, $pol) // Predragom
+echo Padez::lokativ($ime, $pol) // Predragu
 ```
 
 ## Izuzeci kod imena
