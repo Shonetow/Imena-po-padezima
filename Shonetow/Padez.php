@@ -263,7 +263,7 @@ class Padez
                 return $padez->showName();
             }
         } else {
-            if ($padez->endsWith('tar')) {
+            if ($padez->endsWith(array( 'tar', 'leksandar' ))) {
                 return $padez->showName('ra', 2);
             } else if ($padez->endsWith('je')) {
                 return $padez->showName('a', 1);
@@ -301,11 +301,11 @@ class Padez
                 return $padez->showName();
             }
         } else {
-            if ($padez->endsWith('tar')) {
+            if ($padez->endsWith(array( 'tar', 'leksandar' ))) {
                 return $padez->showName('ru', 2);
             } else if ($padez->endsWith(array( 'a', 'co' ))) {
                 return $padez->showName('i', 1);
-            } else if ($padez->endsWith('je', 'o')) {
+            } else if ($padez->endsWith(array('je', 'o'))) {
                 return $padez->showName('u', 1);
             } else if ($padez->endsWith('e')) {
                 return $padez->showName('tu');
@@ -339,7 +339,7 @@ class Padez
                 return $padez->showName();
             }
         } else {
-            if ($padez->endsWith('tar')) {
+            if ($padez->endsWith(array( 'tar', 'leksandar' ))) {
                 return $padez->showName('ra', 2);
             } else if ($padez->endsWith(array( 'a', 'co' ))) {
                 return $padez->showName('u', 1);
@@ -381,16 +381,18 @@ class Padez
         } else {
             if ($padez->endsWith('e') || $padez->maleExceptions()) {
                 return $padez->showName();
-            } else if ($padez->endsWith(array( 'ša', 'aca', 'ka', 'ma' ))) { // Neša, Braca, Đoka
+            } else if ($padez->endsWith(array( 'ša', 'aca', 'ka', 'ma', 'ba' ))) { // Neša, Braca, Đoka, Ljuba
                 return $padez->showName('o', 1);
-            } else if ($padez->endsWith('š')) {
+            } else if ($padez->endsWith('ej')) {
+                return $padez->showName();
+            } else if ($padez->endsWith(array('š', 'j'))) {
                 return $padez->showName('e');
             } else if ($padez->endsWithPrednjonepcani()) {
                 return $padez->showName('u');
             } else if ($padez->endsWith('ca')) {
                 return $padez->showName('e', 1);
-            } else if ($padez->endsWith('tar')) {
-                return $padez->showName('tre', 3);
+            } else if ($padez->endsWith(array( 'tar', 'leksandar' ))) {
+                return $padez->showName('re', 2);
             } else if ($padez->endsWithVowel()) {
                 return $padez->showName();
             } else if ($padez->checkPalatization()) { // Palatalizacija
@@ -423,7 +425,7 @@ class Padez
                 return $padez->showName();
             }
         } else {
-            if ($padez->endsWith('tar')) {
+            if ($padez->endsWith(array( 'tar', 'leksandar' ))) {
                 return $padez->showName('rom', 2);
             } else if ($padez->endsWithPrednjonepcani()) { // Prednjonepčani - Uroš - Urošem
                 return $padez->showName('em');
@@ -461,7 +463,7 @@ class Padez
                 return $padez->showName();
             }
         } else {
-            if ($padez->endsWith('tar')) {
+            if ($padez->endsWith(array( 'tar', 'leksandar' ))) {
                 return $padez->showName('ru', 2);
             } else if ($padez->endsWith(array( 'a', 'co' ))) {
                 return $padez->showName('i', 1);
@@ -522,7 +524,7 @@ class Padez
     }
 
     /**
-     * Proverava da li se ime završava sa navedenim slovima
+     * Proverava da li se ime ili imena završavaju sa navedenim slovima
      *
      * @param $letters
      *
@@ -532,16 +534,27 @@ class Padez
     {
         if (is_array($letters)) {
             foreach ($letters as $letter) {
-                $temp = strlen($this->ime) - strlen($letter);
-                if (stripos($this->ime, $letter, $temp) !== false) {
+                if ($this->contains($letter)) {
                     return true;
                 }
             }
         } else {
-            return (($temp = strlen($this->ime) - strlen($letters)) >= 0
-                    && stripos($this->ime, $letters, $temp) !== false);
+            return $this->contains($letters);
         }
 
         return false;
+    }
+
+    /**
+     * Proverava da li se jedno ime završava sa navedenim slovima
+     *
+     * @param $letters
+     *
+     * @return bool
+     */
+    private function contains($letters)
+    {
+        return (($offset = strlen($this->ime) - strlen($letters)) >= 0
+                && stripos($this->ime, $letters, $offset) !== false);
     }
 }
