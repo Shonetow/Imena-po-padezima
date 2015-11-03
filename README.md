@@ -17,7 +17,7 @@ U skripti možete promeniti vrednosti koje određuju pol. Podrazumevane vrednost
 use Shonetow\Padez;
 
 $ime = 'Predrag';
-$pol = 2
+$pol = 2;
 
 echo Padez::nominativ($ime) // Predrag
 echo Padez::genitiv($ime, $pol) // Predraga
