@@ -14,13 +14,6 @@ class PadezTest extends PHPUnit_Framework_TestCase
         $this->padez = new Shonetow\Padezi\Padez();
     }
 
-    public function testCallAsStatic()
-    {
-        $name = \Shonetow\Padezi\Padez::vokativ('marko', 2);
-
-        $this->assertEqual('Marko', $name);
-    }
-
     public function testCeca()
     {
         $name = 'ceca';
