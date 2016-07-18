@@ -569,9 +569,4 @@ class Padez
             }
         }
     }
-
-    public function __call($name)
-    {
-        echo $name;
-    }
 }

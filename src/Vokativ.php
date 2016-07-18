@@ -28,6 +28,6 @@ class Vokativ
     {
         $instance = new static(new Padez());
 
-        return $instance->padez->vokativ($name, 1);
+        return $instance->padez->vokativ($name, 2);
     }
 }
