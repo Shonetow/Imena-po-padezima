@@ -30,6 +30,15 @@ echo $padez->instrumental($ime, $pol); // Predragom
 echo $padez->lokativ($ime, $pol); // Predragu
 ```
 
+### Vokativ
+S obizrom da je vokativ jedan od najčešćih padeža koji bi koristili, može se i ovako primeniti:
+
+```php
+$vokativ_name = \Shonetow\Padezi\Vokativ::female('ceca');
+
+echo $vokativ_name; // Ceco
+```
+
 ## Izuzeci kod imena
 Neka imena je nemoguće obraditi logički, jer zavise od naglaska. Ovo se uglavnom prepoznaje kod vokativa. U tom slučaju ta imena možete dodati u svojstva `$female_exceptions` i `$male_exceptions`.
 Neka imena se već nalaze tamo, a možete mi poslati Pull request.
