@@ -1,7 +1,7 @@
 Imena po padežima
 =================
 
-Ovaj projekat predstavlja PHP klasu koja menja imena po padežima bez korišćenja baze podataka. Cela skripta je bazirana na srpskom pravopisu, tako da za region nisam siguran.
+Menjanje imena po padežima bez korišćenja baze podataka. Cela skripta je bazirana na srpskom pravopisu, tako da za region nisam siguran.
 
 Demo: http://shonetow.net/padezi
 
@@ -19,13 +19,15 @@ use Shonetow\Padez;
 $ime = 'Predrag';
 $pol = 2;
 
-echo Padez::nominativ($ime) // Predrag
-echo Padez::genitiv($ime, $pol) // Predraga
-echo Padez::dativ($ime, $pol) // Predragu
-echo Padez::akuzativ($ime, $pol) // Predraga
-echo Padez::vokativ($ime, $pol) // Predraže
-echo Padez::instrumental($ime, $pol) // Predragom
-echo Padez::lokativ($ime, $pol) // Predragu
+$padez = new Shonetow\Padezi\Padez();
+
+echo $padez->nominativ($ime); // Predrag
+echo $padez->genitiv($ime, $pol); // Predraga
+echo $padez->dativ($ime, $pol); // Predragu
+echo $padez->akuzativ($ime, $pol); // Predraga
+echo $padez->vokativ($ime, $pol); // Predraže
+echo $padez->instrumental($ime, $pol); // Predragom
+echo $padez->lokativ($ime, $pol); // Predragu
 ```
 
 ## Izuzeci kod imena
