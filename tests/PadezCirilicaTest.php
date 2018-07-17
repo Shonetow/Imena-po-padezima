@@ -497,4 +497,41 @@ class PadezCirilicaTest extends PHPUnit_Framework_TestCase
         $p = $this->padez->lokativ($name, $gender);
         $this->assertEquals('Урошу', $p);
     }
+	
+	/**
+	 * Proverava mogucnost latinicnog inputa sa cirilicnim outputom.
+	 */
+	public function testDiferentInputOutput() {
+		$gender = 2;
+		
+		$this->padez->pismo(2); // podesi pismo outputa na cirilicno bez obzira na pismo inputa.
+
+        // Ko
+        $p = $this->padez->nominativ('Uroš');
+        $this->assertEquals('Урош', $p);
+
+        // Od koga
+        $p = $this->padez->genitiv('predrag', $gender);
+        $this->assertEquals('Предрага', $p);
+
+        // Kome
+        $p = $this->padez->dativ('momčilo', $gender);
+        $this->assertEquals('Момчилу', $p);
+
+        // Koga
+        $p = $this->padez->akuzativ('Uroš', $gender);
+        $this->assertEquals('Уроша', $p);
+
+        // Hej (za dozivanje)
+        $p = $this->padez->vokativ('predrag', $gender);
+        $this->assertEquals('Предраже', $p);
+
+        // S kim
+        $p = $this->padez->instrumental('ana', 1);
+        $this->assertEquals('Аном', $p);
+
+        // O kome
+        $p = $this->padez->lokativ('Marija', 1);
+        $this->assertEquals('Марији', $p);
+	}
 }

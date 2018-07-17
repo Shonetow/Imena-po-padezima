@@ -92,6 +92,8 @@ class Padez
 	
 	/**
 	 * Mapa za konvertovanje cirilicnog pisma u latinicno i obrnuto.
+	 * Cirilicna slova koja se u latinicnom pismu pisu sa dva znaka (dj, lj, nj, dž)
+	 * moraju biti na pocetku
 	 *
 	 * @var array
 	 */
@@ -145,9 +147,12 @@ class Padez
     {
         mb_internal_encoding('UTF-8');
 		
+		// Pretrazi cirilicne karaktere
 		$isCyrillic = preg_match('/\p{Cyrillic}/u', $ime);
 		
-		if ($isCyrillic) {
+		// Ako je cirilicno prevedi u latinicno i nastavi po vec utvrdjenoj logici za latinicno pismo.
+		if ($isCyrillic || $this->pismo == 2) {
+			// Setuj pismo na cirilicno, neophodno da se vrati u cirilicno kod output-a
 			$this->pismo = 2;
 			
 			foreach($this->transliterationMap['cyrillic'] as $index => $letter) {
@@ -211,16 +216,18 @@ class Padez
 		$trim = ($trim > 0) ? - 1 * $trim : $trim; // Force negative
         $output = mb_substr($this->ime, 0, $trim) . $sequel;
 		
+		// Pretvaranje padeza vrsi se u latinici.
+		// Ako je input bio u cirilicnom pismu, prevedi nazad u cirilicu.
 		if ($this->pismo == 2) {
-			$cyr_output = mb_convert_case($output, MB_CASE_LOWER, "UTF-8");
+			$cyr_output = mb_convert_case($output, MB_CASE_LOWER, "UTF-8"); // to lowercase
 			foreach($this->transliterationMap['latin'] as $index => $letter) {
 				$cyr_output = str_replace($letter, $this->transliterationMap['cyrillic'][$index], $cyr_output);
 			}
 			
-			return mb_convert_case($cyr_output, MB_CASE_TITLE, "UTF-8");
+			return mb_convert_case($cyr_output, MB_CASE_TITLE, "UTF-8"); // vrati cirilicno ime
 		}
 		
-		return $output;
+		return $output; // vrati latinicno ime
     }
 
     /****************************************
@@ -538,16 +545,18 @@ class Padez
     {
         $output = mb_substr($this->ime, 0, - 1) . str_replace($this->pal, $this->pal2, $this->endingChars(1)) . 'e';
 		
+		// Pretvaranje padeza vrsi se u latinici.
+		// Ako je input bio u cirilicnom pismu, prevedi nazad u cirilicu.
 		if ($this->pismo == 2) {
-			$cyr_output = mb_convert_case($output, MB_CASE_LOWER, "UTF-8");
+			$cyr_output = mb_convert_case($output, MB_CASE_LOWER, "UTF-8"); // to lowercase
 			foreach($this->transliterationMap['latin'] as $index => $letter) {
 				$cyr_output = str_replace($letter, $this->transliterationMap['cyrillic'][$index], $cyr_output);
 			}
 			
-			return mb_convert_case($cyr_output, MB_CASE_TITLE, "UTF-8");
+			return mb_convert_case($cyr_output, MB_CASE_TITLE, "UTF-8"); // vrati cirilicno ime
 		}
 		
-		return $output;
+		return $output; // vrati latinicno ime
     }
 
     /****************************************
@@ -629,4 +638,12 @@ class Padez
             }
         }
     }
+	
+	public function pismo($pismo) {
+		if ($pismo == 2 || $pismo == 'cirilica' || $pismo == 'cyrillic') {
+			$this->pismo = 2;
+		} else {
+			$this->pismo = 1;
+		}
+	}
 }
