@@ -89,6 +89,34 @@ class Padez
      * @var
      */
     protected $num_err = 0;
+	
+	/**
+	 * Mapa za konvertovanje cirilicnog pisma u latinicno i obrnuto.
+	 *
+	 * @var array
+	 */
+	protected $transliterationMap = [
+		'cyrillic' => [
+			'ђ', 'љ', 'њ', 'џ', 'а', 'б', 'в', 'г', 'д', 'е',
+			'ж', 'з', 'и', 'ј', 'к', 'л', 'м', 'н', 'о', 'п',
+			'р', 'с', 'т', 'ћ', 'у', 'ф', 'х', 'ц', 'ч', 'ш'
+		],
+		'latin' => [
+			'dj', 'lj', 'nj', 'dž', 'a', 'b', 'v', 'g', 'd', 'e',  
+			'ž', 'z', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
+			'r', 's', 't', 'ć', 'u', 'f', 'h', 'c', 'č', 'š'
+		]
+	];
+	
+	/**
+	 * Definise pismo.
+	 * 
+	 * 1 = latinica
+	 * 2 = cirilica
+	 *
+	 * @var array
+	 */
+	protected $pismo = 1;
 
     /****************************************
      * 1 NOMINATIV - Ko, šta
@@ -116,6 +144,16 @@ class Padez
     public function setUp($ime, $gender)
     {
         mb_internal_encoding('UTF-8');
+		
+		$isCyrillic = preg_match('/\p{Cyrillic}/u', $ime);
+		
+		if ($isCyrillic) {
+			$this->pismo = 2;
+			
+			foreach($this->transliterationMap['cyrillic'] as $index => $letter) {
+				$ime = str_replace($letter, $this->transliterationMap['latin'][$index], $ime);
+			}
+		}
 
         $this->setName($ime);
 
@@ -133,7 +171,7 @@ class Padez
      */
     public function setName($ime)
     {
-        // Za svaki slučaj se imenu ukidaju razmaci sa početka i kraja
+		// Za svaki slučaj se imenu ukidaju razmaci sa početka i kraja
         $ime = trim($ime);
 
         // Definisanje imena. Ime se piše sa prvim velikim slovom
@@ -170,8 +208,19 @@ class Padez
      */
     protected function showName($sequel = '', $trim = null)
     {
-        $trim = ($trim > 0) ? - 1 * $trim : $trim; // Force negative
-        return mb_substr($this->ime, 0, $trim) . $sequel;
+		$trim = ($trim > 0) ? - 1 * $trim : $trim; // Force negative
+        $output = mb_substr($this->ime, 0, $trim) . $sequel;
+		
+		if ($this->pismo == 2) {
+			$cyr_output = mb_convert_case($output, MB_CASE_LOWER, "UTF-8");
+			foreach($this->transliterationMap['latin'] as $index => $letter) {
+				$cyr_output = str_replace($letter, $this->transliterationMap['cyrillic'][$index], $cyr_output);
+			}
+			
+			return mb_convert_case($cyr_output, MB_CASE_TITLE, "UTF-8");
+		}
+		
+		return $output;
     }
 
     /****************************************
@@ -487,7 +536,18 @@ class Padez
      */
     private function palatization()
     {
-        return mb_substr($this->ime, 0, - 1) . str_replace($this->pal, $this->pal2, $this->endingChars(1)) . 'e';
+        $output = mb_substr($this->ime, 0, - 1) . str_replace($this->pal, $this->pal2, $this->endingChars(1)) . 'e';
+		
+		if ($this->pismo == 2) {
+			$cyr_output = mb_convert_case($output, MB_CASE_LOWER, "UTF-8");
+			foreach($this->transliterationMap['latin'] as $index => $letter) {
+				$cyr_output = str_replace($letter, $this->transliterationMap['cyrillic'][$index], $cyr_output);
+			}
+			
+			return mb_convert_case($cyr_output, MB_CASE_TITLE, "UTF-8");
+		}
+		
+		return $output;
     }
 
     /****************************************
