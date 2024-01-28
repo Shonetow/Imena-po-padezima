@@ -49,7 +49,7 @@ class Padez
         'Bilja',
         'Anđa'
     );
-    protected $male_exceptions = array( 'Saša', 'Paša', 'Jakša' );
+    protected $male_exceptions = array( 'Saša', 'Paša', 'Jakša', 'Luka' );
 
     /**
      * KRAJ PODEŠAVANJA
@@ -416,8 +416,10 @@ class Padez
         } else {
             if ($this->endsWith('e') || $this->maleExceptions()) {
                 return $this->showName();
-            } else if ($this->endsWith(array( 'ša', 'aca', 'ka', 'ma', 'ba' ))) { // Neša, Braca, Đoka, Ljuba
+            } else if ($this->endsWith(array( 'eša', 'aca', 'ka', 'ma', 'ba' ))) { // Neša, Braca, Đoka, Ljuba
                 return $this->showName('o', 1);
+            } else if ($this->endsWith(array( 'la', 'ja', 'ša', 'sa', 'ta' ))) {
+              return $this->showName();
             } else if ($this->endsWith('ej')) {
                 return $this->showName();
             } else if ($this->endsWith(array('š', 'j'))) {
